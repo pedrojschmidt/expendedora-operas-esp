@@ -21,7 +21,7 @@
     #define BROKER_USER ""
     #define BROKER_PASS ""
 #elif (MQTT==1)
-    #define BROKER_NAME "44.201.113.109"          //  Mosquitto outside local network
+    #define BROKER_NAME "54.227.52.201"          //  Mosquitto outside local network
     #define BROKER_PORT 1883
     #define BROKER_USER ""
     #define BROKER_PASS ""

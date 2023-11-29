@@ -46,6 +46,34 @@ static const int  mqttPort =        BROKER_PORT;
 static const char *mqttUser =       BROKER_USER;
 static const char *mqttPassword =   BROKER_PASS;
 
+void 
+callback(char *topic, byte *payload, unsigned int length) {
+    Serial.println("Mensaje recibido:");
+    Serial.print("Topic: ");
+    Serial.println(topic);
+    Serial.print("Payload: ");
+    for (int i = 0; i < length; i++) {
+    Serial.print((char)payload[i]);
+    }
+    Serial.println();
+
+    if(topic == "OperasOriginales") {
+        digitalWrite(22, HIGH);
+        delay(1000);
+        digitalWrite(22, LOW);
+    }
+    if(topic == "OperasChocolate") {
+        digitalWrite(23, HIGH);
+        delay(1000);
+        digitalWrite(23, LOW);
+    }
+    if(topic == "OperasFrutilla") {
+        digitalWrite(24, HIGH);
+        delay(1000);
+        digitalWrite(24, LOW);
+    }
+}
+
 /*
  *  Private functions
  */
@@ -69,7 +97,7 @@ client_connect(void)
     Serial.printf("server = %s\n",mqttServer);
 
     client.setServer(mqttServer, mqttPort);
-
+    client.setCallback(callback);
     while (!client.connected())
     {
         if (client.connect("Pepe"))
@@ -83,7 +111,22 @@ client_connect(void)
     Serial.printf("Connected to %s\n", mqttServer);
 }
 
+static void
+subscribe_to( const char *ptopic )
+{
+    int status;
+ 
+    status = client.subscribe(ptopic);
+    Serial.printf("%s -> topic: %s [status = %d]\n", __FUNCTION__, ptopic, status);
+}
 
+static void
+init_subscriptions(void)
+{
+    subscribe_to("OperasOriginales");
+    subscribe_to("OperasChocolate");
+    subscribe_to("OperasFrutilla");
+}
 
 /*
  *  Public functions
@@ -99,9 +142,8 @@ client_connect(void)
 void
 init_mqtt(int num)
 {
-
-
     client_connect();
+    init_subscriptions();
 }
 
 void
@@ -111,5 +153,9 @@ do_publish(const char *ptopic, const char *msg)
     Serial.printf( "%s: %s %s\n\r", __FUNCTION__, ptopic, msg );
 }
 
-
+void
+test_mqtt(void)
+{
+    client.loop();
+}
 
