@@ -21,6 +21,10 @@
 #include "mqtt.h"               //  Prototypes of this module public functions      //  Actions to be called in case of subscription topics news
 #include "mqtt_def.h"           //  User configuration file
 
+#define LED1 22
+#define LED2 16
+#define LED3 17
+
 /*
  *  Objects instantiations
  */
@@ -46,8 +50,18 @@ static const int  mqttPort =        BROKER_PORT;
 static const char *mqttUser =       BROKER_USER;
 static const char *mqttPassword =   BROKER_PASS;
 
+void handleLED(int ledPin) {
+    digitalWrite(ledPin, !digitalRead(ledPin));
+    
+}
+
+
 void 
 callback(char *topic, byte *payload, unsigned int length) {
+    pinMode(LED1, OUTPUT);
+    pinMode(LED2, OUTPUT);
+    pinMode(LED3, OUTPUT);
+   
     Serial.println("Mensaje recibido:");
     Serial.print("Topic: ");
     Serial.println(topic);
@@ -57,20 +71,23 @@ callback(char *topic, byte *payload, unsigned int length) {
     }
     Serial.println();
 
-    if(topic == "OperasOriginales") {
-        digitalWrite(22, HIGH);
+    if(strcmp(topic, "OperasOriginales") == 0) {
+        Serial.print("holis ");
+        handleLED(LED1);
         delay(1000);
-        digitalWrite(22, LOW);
+        handleLED(LED1);
     }
-    if(topic == "OperasChocolate") {
-        digitalWrite(23, HIGH);
+    if(strcmp(topic, "OperasChocolate") == 0) {
+         Serial.print("holis 2");
+        handleLED(LED2);
         delay(1000);
-        digitalWrite(23, LOW);
+        handleLED(LED2);
     }
-    if(topic == "OperasFrutilla") {
-        digitalWrite(24, HIGH);
+    if(strcmp(topic, "OperasFrutilla") == 0 ) {
+         Serial.print("holis 3");
+        handleLED(LED3);
         delay(1000);
-        digitalWrite(24, LOW);
+        handleLED(LED3);
     }
 }
 
@@ -158,4 +175,7 @@ test_mqtt(void)
 {
     client.loop();
 }
+
+
+
 

@@ -9,8 +9,8 @@
  */
 
 #if (WIFI==0)                   //  Home settings
-    #define MY_SSID "Latifi"
-    #define MY_PASS "Bernabeu12117"
+    #define MY_SSID "GABI 3010"
+    #define MY_PASS "maria2812"
 #elif (WIFI==1)                 //  University settings
     #define MY_SSID "UA-Alumnos"
     #define MY_PASS "41umn05WLC"
